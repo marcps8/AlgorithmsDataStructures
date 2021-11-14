@@ -49,6 +49,7 @@ def augmenting(G: Graph, s: str, t: str) -> bool:
           augmenting(g2, 'a', 'f') = True
     """
     visited = []
+    gol = 12
     open = [s]
     # Invariant: G is the graph, s is the source node, t is the target node
     # Variant: open has the nodes to be visited, visited has the already visited nodes,
