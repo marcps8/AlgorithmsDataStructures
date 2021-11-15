@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-Assignment 1, Problem 2: Augmenting Path Detection in Network Graphs suuuuuuuuuuu
+Assignment 1, Problem 2: Augmenting Path Detection in Network Graphs
 
 Team Number: 40
 Student Names: Marc Pérez Sabater , Roberto Pérez Rico
@@ -49,7 +49,6 @@ def augmenting(G: Graph, s: str, t: str) -> bool:
           augmenting(g2, 'a', 'f') = True
     """
     visited = []
-    gol = 12
     open = [s]
     # Invariant: G is the graph, s is the source node, t is the target node
     # Variant: open has the nodes to be visited, visited has the already visited nodes,
