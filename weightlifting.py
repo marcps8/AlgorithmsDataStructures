@@ -40,8 +40,6 @@ __all__ = ['weightlifting', 'weightlifting_subset']
 
 
 def weightlifting(P: Set[int], weight: int) -> bool:
-    print(P)
-    print(f'weight: {weight}')
     '''
     Sig:  Set[int], int -> bool
     Pre:
@@ -51,37 +49,23 @@ def weightlifting(P: Set[int], weight: int) -> bool:
           weightlifting(P, 11) = False
     '''
     plate_list = list(P)
-    plate_list.sort()
-    if weight == 0: return True
-
     # Initialise the dynamic programming matrix
     dp_matrix = [
-        [None for i in range(weight + 1)] for j in range(len(plate_list) + 1)]
-    dp_matrix[0][0]= True;
+        [None for i in range(weight + 1)] for j in range(len(plate_list) + 1)
+    ]
 
-    for p in range(1,len(plate_list) + 1):
-        #print(f'p : {p}')
-        for i in range (weight+1):
-            #print(f'{i}: {dp_matrix[p-1][i]}')
-            if dp_matrix[p-1][i] is not None:
-                dp_matrix[p][i] = True
-            if dp_matrix[p-1][i] is None:
-                #print(f'lista: {plate_list[0:p]}')
-                dp_matrix[p][i] = aux_sum(i,plate_list,p-1)
-                #print(f'new {i}: {dp_matrix[p][i]}')
-    print(dp_matrix[-1][-1])
+    for i in range(len(plate_list) + 1):
+        dp_matrix[i][0] = True
+
+    for i in range(1, len(plate_list) + 1):
+        for j in range(1, weight + 1):
+            if plate_list[i - 1] > j:
+                dp_matrix[i][j] = dp_matrix[i - 1][j]
+            else:
+                dp_matrix[i][j] = dp_matrix[i - 1][j] or dp_matrix[i - 1][j - plate_list[i - 1]]
     if dp_matrix[-1][-1] is None:
         return False
     return True
-def aux_sum(weight: int, plates , n  : int):
-    if weight == 0:
-        return True
-    if n < 0:
-        return None
-    #print(f'plates[n]: {plates[n]} and weight : {weight}')
-    if plates[n] > weight:
-        return aux_sum(weight,plates, n-1)
-    return aux_sum(weight,plates, n-1) or aux_sum(weight - plates[n],plates, n-1 )
 
 def weightlifting_subset(P: Set[int], weight: int) -> Set[int]:
     '''
@@ -92,56 +76,31 @@ def weightlifting_subset(P: Set[int], weight: int) -> Set[int]:
           weightlifting_subset(P, 299) = {56, 7, 234, 2}
           weightlifting_subset(P, 11) = {}
     '''
+    plate_list = list(P)
+    # Initialise the dynamic programming matrix
+    dp_matrix = [
+        [(None,set()) for i in range(weight + 1)] for j in range(len(plate_list) + 1)
+    ]
+    for i in range(len(plate_list) + 1):
+        dp_matrix[i][0] = (True,{})
 
-'''    
-def weightlifting(P: Set[int], weight: int) -> bool:
-    
-    Sig:  Set[int], int -> bool
-    Pre:
-    Post:
-    Ex:   P = {2, 32, 234, 35, 12332, 1, 7, 56}
-          weightlifting(P, 299) = True
-          weightlifting(P, 11) = False
-    
-    n = len(list(P))
-    return subset_aux_sum(P=list(P), n=n, weight=weight)
-
-
-def subset_aux_sum(P, n, weight):
-    if weight == 0:
-        return True
-    if n == 0:
-        return False
-    if P[n - 1] > weight:
-        return subset_aux_sum(P, n - 1, weight)
-    return subset_aux_sum(P,n-1, weight) or subset_aux_sum(P, n-1, weight - P[n-1])
-
-
-def weightlifting_subset(P: Set[int], weight: int) -> Set[int]:
-    
-    Sig:  Set[int], int -> Set[int]
-    Pre:
-    Post:
-    Ex:   P = {2, 32, 234, 35, 12332, 1, 7, 56}
-          weightlifting_subset(P, 299) = {56, 7, 234, 2}
-          weightlifting_subset(P, 11) = {}
-    
-
-    n = len(list(P))
-    return subset_aux_sum_set(P=list(P), n=n, weight=weight, wset = [])
+    for i in range(1, len(plate_list) + 1):
+        for j in range(1, weight + 1):
+            if plate_list[i - 1] > j:
+                dp_matrix[i][j] = dp_matrix[i - 1][j]
+            else:
+                tempbol = dp_matrix[i - 1][j][0] or dp_matrix[i - 1][j - plate_list[i - 1]][0]
+                if dp_matrix[i - 1][j][0]:
+                    tempset = dp_matrix[i - 1][j][1]
+                if dp_matrix[i - 1][j - plate_list[i - 1]][0]:
+                    tempset = {plate_list[i - 1]}.union(dp_matrix[i - 1][j - plate_list[i - 1]][1])
+                dp_matrix[i][j] = (tempbol,tempset)
+    if dp_matrix[-1][-1][0] is None:
+        return set({})
+    return set(dp_matrix[-1][-1][1])
 
 
-def subset_aux_sum_set(P, n, weight, wset):
-    if weight == 0:
-        print(wset)
-        return set(wset)
-    if n == 0:
-        return []
-    if P[n - 1] > weight:
-        return subset_aux_sum(P, n - 1, weight,wset)
-    return subset_aux_sum(P, n - 1, weight,wset) + subset_aux_sum(P, n - 1, weight - P[n - 1],wset+[P[n-1]])
-'''
-#print(weightlifting({2, 32, 234, 35, 12332, 1, 7, 56},299))
+
 class WeightliftingTest(unittest.TestCase):
     """
     Test Suite for weightlifting problem
