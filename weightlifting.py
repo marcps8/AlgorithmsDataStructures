@@ -3,7 +3,7 @@
 '''
 Assignment 1, Problem 1: Weightlifting
 
-Team Number:
+Team Number: 40
 Student Names:
 Marc Pérez Sabater
 Roberto Pérez Rico
@@ -42,8 +42,9 @@ __all__ = ['weightlifting', 'weightlifting_subset']
 def weightlifting(P: Set[int], weight: int) -> bool:
     '''
     Sig:  Set[int], int -> bool
-    Pre:
-    Post:
+    Pre: P is a Set of integers representing plates with different weights,
+        weight is an integer representing the weight we want to get using our plates
+    Post: True if we can get exactly weight using a subset of the set of the plates
     Ex:   P = {2, 32, 234, 35, 12332, 1, 7, 56}
           weightlifting(P, 299) = True
           weightlifting(P, 11) = False
@@ -55,10 +56,16 @@ def weightlifting(P: Set[int], weight: int) -> bool:
     ]
 
     for i in range(len(plate_list) + 1):
+        # Invariant:
+        # Variant:
         dp_matrix[i][0] = True
 
     for i in range(1, len(plate_list) + 1):
+        # Invariant:
+        # Variant:
         for j in range(1, weight + 1):
+            # Invariant:
+            # Variant:
             if plate_list[i - 1] > j:
                 dp_matrix[i][j] = dp_matrix[i - 1][j]
             else:
@@ -70,8 +77,10 @@ def weightlifting(P: Set[int], weight: int) -> bool:
 def weightlifting_subset(P: Set[int], weight: int) -> Set[int]:
     '''
     Sig:  Set[int], int -> Set[int]
-    Pre:
-    Post:
+    Pre:P is a Set of integers representing plates with different weights,
+        weight is an integer representing the weight we want to get using our plates
+    Post: return the subset of plates with which we get exactly the weight, if we can't
+        obtain it we return the empty set
     Ex:   P = {2, 32, 234, 35, 12332, 1, 7, 56}
           weightlifting_subset(P, 299) = {56, 7, 234, 2}
           weightlifting_subset(P, 11) = {}
@@ -82,10 +91,16 @@ def weightlifting_subset(P: Set[int], weight: int) -> Set[int]:
         [(None,set()) for i in range(weight + 1)] for j in range(len(plate_list) + 1)
     ]
     for i in range(len(plate_list) + 1):
+        # Invariant:
+        # Variant:
         dp_matrix[i][0] = (True,{})
 
     for i in range(1, len(plate_list) + 1):
+        # Invariant:
+        # Variant:
         for j in range(1, weight + 1):
+            # Invariant:
+            # Variant:
             if plate_list[i - 1] > j:
                 dp_matrix[i][j] = dp_matrix[i - 1][j]
             else:

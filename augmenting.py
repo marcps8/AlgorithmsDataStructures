@@ -50,10 +50,11 @@ def augmenting(G: Graph, s: str, t: str) -> bool:
     """
     visited = []
     open = [s]
-    # Invariant: G is the graph, s is the source node, t is the target node
-    # Variant: open has the nodes to be visited, visited has the already visited nodes,
-    #           nei is the list of neighbors of the node n, n is current node
+
     while len(open) > 0:
+        # Invariant: G is the graph, s is the source node, t is the target node
+        # Variant: open has the nodes to be visited, visited has the already visited nodes,
+        #           nei is the list of neighbors of the node n, n is current node
         n = open.pop(0)
         visited.append(n)
         nei = G.neighbors(n)
